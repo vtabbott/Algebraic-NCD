@@ -270,16 +270,17 @@ def to_torch(target: Shape, name: str = "GeneratedNN"):
     class_header = f"class {name}(nn.Module):"
 
     # Get the init block
-    init_header = f'{space}def __init__(self, {
-        ', '.join([x.name for x in config.configs])}):'
+    init_header = f'{space}def __init__(self, ' \
+        + f'{', '.join([x.name for x in config.configs])}):' \
+        + f'\n{space}{space}super().__init__()'
     init_content = "\n".join([
         f"{space}{space}{x}"
         for x in to_code(code_framework, torch_init).split("\n")
     ])
 
     # Get the forward block
-    fwd_header = f'{space}def forward(self, {
-        ', '.join([x for x in initial.output_var])}):'
+    fwd_header = f'{space}def forward(self, ' \
+        +f'{', '.join([x for x in initial.output_var])}):'
     fwd_content = (
         "\n".join([
             f"{space}{space}{x}"
